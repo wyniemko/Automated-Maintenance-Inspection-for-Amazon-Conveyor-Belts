@@ -1,4 +1,4 @@
-# Amazon Conveyor Belt Tracking Detection
+# Amazon Conveyor Belt Tracking
 
 This code uses OpenCV and Numpy to process a video and perform various operations on it, including recording, frame extraction, masking, and contour detection.
 
