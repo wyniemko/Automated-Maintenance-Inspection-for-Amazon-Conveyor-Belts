@@ -1,4 +1,4 @@
-# Belt Length Detection Code
+# Amazon Conveyor Belt Tracking Detection
 
 This code uses OpenCV and Numpy to process a video and perform various operations on it, including recording, frame extraction, masking, and contour detection.
 
