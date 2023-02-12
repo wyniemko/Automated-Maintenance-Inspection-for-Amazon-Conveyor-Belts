@@ -107,6 +107,12 @@ for image_name in images:
 # Create a list to store the sum of white pixels in each contour
 pixel_sums = []
 
+# Create a variable to store the running average
+running_average = 0
+
+# Create a list to store the frame filenames with large deviations
+outlier_frames = []
+
 # Loop over all images in the folder "Frame"
 frame_counter = 0
 for filename in os.listdir("Frame"):
@@ -143,6 +149,16 @@ for filename in os.listdir("Frame"):
 
     vertical_length = sum(pixel_sums) / img.shape[1]
     rounded_vertical_length = round(vertical_length, 4)
+
+    # Check if the rounded_vertical_length deviates from the running average by more than 3.000 pixels
+    if frame_counter == 0:
+        running_average = rounded_vertical_length
+    else:
+        if abs(rounded_vertical_length - running_average) > 3.000:
+            outlier_frames.append(filename)
+
+    # Update the running average
+    running_average = (running_average + rounded_vertical_length) / 2
 
     print("The vertical length of the gray belt in " + filename + " is:", rounded_vertical_length)
 
