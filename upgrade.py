@@ -2,6 +2,19 @@ import cv2
 import numpy as np
 import os
 import time
+import sqlite3
+
+#making a new databaste
+conn = sqlite3.connect("belt_data.db")
+cursor = conn.cursor()
+cursor.execute("""CREATE TABLE IF NOT EXISTS belt_data (
+                    id INTEGER PRIMARY KEY,
+                    speed REAL,
+                    length REAL,
+                    cycle_length REAL,
+                    frame_num INTEGER,
+                    frame BLOB
+                )""")
 
 #Part 1: Taking the video
 def calc_cycle_length(speed, length):
@@ -56,6 +69,20 @@ for frame_num in range(total_frames):
     ret, frame = cap.read()
     if ret:
         cv2.imwrite(f'Frame/frame_{frame_num}.jpg', frame)
+    else:
+        break
+
+# Store in the database After you extract each frame from the video
+for frame_num in range(total_frames):
+    ret, frame = cap.read()
+    if ret:
+        # Encode the frame as a byte string
+        frame_str = cv2.imencode('.jpg', frame)[1].tobytes()
+
+        # Insert the data into the table
+        cursor.execute("""INSERT INTO belt_data (speed, length, cycle_length, frame_num, frame)
+                            VALUES (?, ?, ?, ?, ?)""",
+                            (speed, length, cycle_length, frame_num, frame_str))
     else:
         break
 
@@ -168,3 +195,7 @@ for filename in os.listdir("Frame"):
     frame_counter += 1
     if frame_counter == 300:
         break
+
+
+conn.commit()
+conn.close()
