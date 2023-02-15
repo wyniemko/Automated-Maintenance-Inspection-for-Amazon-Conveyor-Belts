@@ -1,6 +1,43 @@
 import open3d as o3d
 import numpy as np
 import cv2
+import os
+import time
+
+#Part 1: Taking the video
+def calc_cycle_length(speed, length):
+    return length/speed * 5280 / 3600
+
+if __name__ == "__main__":
+    speed = float(input("Enter the speed of the belt in mph: "))
+    length = float(input("Enter the length of the belt in feet: "))
+
+    cycle_length = calc_cycle_length(speed, length)
+    print("The cycle length is", cycle_length, "seconds")
+    
+    cap = cv2.VideoCapture(0)
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter('belt.mp4',fourcc, 20.0, (640,480))
+    
+    recording_time = cycle_length
+    start_time = time.time()
+    while(cap.isOpened() and time.time() - start_time < recording_time):
+        ret, frame = cap.read()
+        if ret==True:
+            out.write(frame)
+
+            cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+        else:
+            break
+    
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+
+# Part 2: Extracting frames from the video
 
 # Load the video file
 cap = cv2.VideoCapture('belt.mp4')
@@ -41,6 +78,9 @@ while(cap.isOpened()):
 
         # Display the Point Cloud
         o3d.visualization.draw_geometries([pcd])
+
+        if o3d.vis
+
 
         # Press 'q' to exit
         if cv2.waitKey(1) & 0xFF == ord('q'):
