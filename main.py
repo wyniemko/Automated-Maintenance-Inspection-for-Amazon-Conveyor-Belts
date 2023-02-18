@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import time
+import matplotlib.pyplot as plt
 
 #Part 1: Taking the video
 def calc_cycle_length(speed, length):
@@ -102,53 +103,73 @@ for image_name in images:
     # Save the masked image
     cv2.imwrite(os.path.join(folder, image_name), result)
 
-# Part 4: Detecting the vertical length of the gray belt
+# part 4: Edge detection for all the images in Frame folder
 
-# Create a list to store the sum of white pixels in each contour
-pixel_sums = []
+# Create a folder to store the edge-detected frames
+if not os.path.exists('Edge'):
+    os.makedirs('Edge')
 
-# Loop over all images in the folder "Frame"
-frame_counter = 0
+# Loop through all files in Frame folder
 for filename in os.listdir("Frame"):
     # Load the image
     img = cv2.imread(os.path.join("Frame", filename))
 
-    # Apply background subtraction
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    thresh = cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)[1]
+    # Convert to grayscale
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # Blur the image for better edge detection
+    img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) 
+    
+    # Sobel Edge Detection on the Y axis
+    sobely = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=1)
+    
+    # Canny Edge Detection
+    edges = cv2.Canny(image=img_blur, threshold1=25, threshold2=35)
+    
+    # Save the image with the edge detection result
+    cv2.imwrite(os.path.join("Edge", f"Edge Detection_{filename}"), edges)
+ 
+cv2.destroyAllWindows()
 
-    # Apply Canny edge detection
-    edges = cv2.Canny(thresh, 75, 150)
 
-    # Find contours
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+# Part 5: testing straight line detection
 
-    for contour in contours:
-        # Get the bounding box of the contour
-        x, y, w, h = cv2.boundingRect(contour)
+# Create an empty list to store all straightness values
+straightness_values = []
 
-        # Check if the contour is located in the top of the image
-        if y < img.shape[0] / 2:
-            # Create a mask for the current contour
-            mask = np.zeros(img.shape, np.uint8)
-            cv2.drawContours(mask, [contour], 0, (255, 255, 255), -1)
+# Loop through all files in Edge folder
+for filename in os.listdir("Edge"):
+    # Load the image
+    img = cv2.imread(os.path.join("Edge", filename))
 
-            # Convert the mask to grayscale
-            gray_mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
+    # Convert to grayscale
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-            # Sum the white pixels in the contour
-            white_pixels = cv2.countNonZero(gray_mask)
-            pixel_sums.append(white_pixels)
+    # Detect vertical lines using Hough transform
+    lines = cv2.HoughLinesP(img_gray, rho=1, theta=np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
 
-    vertical_length = sum(pixel_sums) / img.shape[1]
-    rounded_vertical_length = round(vertical_length, 4)
+    # Calculate the average distance between endpoints of detected lines
+    if lines is not None:
+        endpoint_dists = [abs(line[0][2]-line[0][0]) for line in lines if abs(line[0][3]-line[0][1]) > 20]
+        avg_dist = sum(endpoint_dists) / len(endpoint_dists) if len(endpoint_dists) > 0 else 0
 
-    print("The vertical length of the gray belt in " + filename + " is:", rounded_vertical_length)
+        # Calculate the straightness of the vertical edge
+        straightness = 1 / avg_dist if avg_dist > 0 else 0
 
-    # Reset the list of pixel sums for the next image
-    pixel_sums = []
+        # Append the straightness value to the list
+        straightness_values.append(straightness)
 
-    frame_counter += 1
-    if frame_counter == 300:
-        break
+        print(f"Straightness of {filename}: {straightness:.2f}")
+    else:
+        print(f"No vertical lines detected in {filename}, move camera further left.")
+
+# Calculate the average of all straightness values
+avg_straightness = sum(straightness_values) / len(straightness_values) if len(straightness_values) > 0 else 0
+
+# Print the final average straightness value and corresponding statement with extra spacing
+print("\n\n" +
+      f"Final average straightness value: {avg_straightness:.2f}\n" +
+      ("The straightness belt is on track." if avg_straightness >= 0.75 else
+       "The conveyor belt is slightly misaligned. Tighten the belt." if avg_straightness >= 0.50 else
+       "The conveyor belt is misaligned. Replace the belt & add more tension.") +
+      "\n\n")
