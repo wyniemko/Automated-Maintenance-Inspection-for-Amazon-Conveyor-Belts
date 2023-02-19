@@ -67,6 +67,7 @@ Next, I use the Hough transformation algorithm to detect the straight lines in t
 <p align="center">
   <em>The Hough Space is now represented with ρ and θ instead of slope a and intercept b, where the horizontal axis is for the θ values and the vertical axis is for the ρ values. An edge point generates a cosine curve in the Hough Space, replacing the straight line representation and resolving the issue of unbounded values of a that arises when dealing with vertical lines.</em>
 </p>
+
 The algorithm counts the number of intersections of lines in the transformed image, which correspond to points in the original image that are part of the same line. By thresholding the number of intersections, we can identify the lines in the original belt image.
 
 After processing the images to grayscale with Sobel edge and Canny edge detection, I loop through each file in the "Edge" folder and apply the Hough transformation algorithm to detect the vertical lines in the image. I store the resulting value of the "straightness" in a list called "straightness_values".
