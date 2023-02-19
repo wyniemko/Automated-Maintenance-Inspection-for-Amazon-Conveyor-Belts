@@ -8,7 +8,7 @@ The purpose of this code is to record, process, and analyze the full length of a
 - OpenCV
 - Numpy
 
-## OpenCV Functions
+## Utilization of OpenCV Functions
 
 - cv2.VideoCapture(): to access the video capture device to record the video.
 - cv2.VideoWriter_fourcc(): to select the video codec for the video writer object.
@@ -49,7 +49,7 @@ This section of the code processes the images in the "Frame" folder by masking t
 
 Using two edge detection algorithms - Hough and Sobel - to detect the edges in the images.
 
-# Sobel Edge Detection
+### Sobel Edge Detection
 
 First, I extract the frames from the video and apply Sobel edge detection and Canny edge detection to the grayscale image. I then apply the Sobel edge detection on the Y-axis to detect vertical edges and save the resulting image in the "Edge" folder. The Sobel algorithm works by computing the gradient of the image using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges. The output of the two convolutions is combined to create a single edge map that highlights areas of high intensity change in any direction. This edge map is thresholded to identify the edges in the original belt image.
 
@@ -59,7 +59,7 @@ First, I extract the frames from the video and apply Sobel edge detection and Ca
   <em>Using the Sobel edge detection method to detect edges in an image by computing the gradient of the image. This is done using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges, which are applied to the image to obtain the gradient components in both directions.</em>
 </p>
 
-# Hough Transformation
+### Hough Transformation
 Next, I use the Hough transformation algorithm to detect the straight lines in the image. The Hough transformation algorithm works by converting the image from Cartesian coordinates (x, y) to polar coordinates (r, θ) using the Hough transform. This transforms each point in the original image to a line in the transformed image.
 
 <img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_Cr73Mte5NNgO16D4moKDQg.webp" alt="Hough Transformation Algorithm">
@@ -73,4 +73,4 @@ After processing the images to grayscale with Sobel edge and Canny edge detectio
 
 ## Conclusion
 
-This code provides a simple way to perform various video analysis operations using OpenCV and Numpy. By entering the speed and length of the conveyor belt, the code can automatically calculate the cycle length and extract the necessary frames for analysis. The code can then mask the frames and detect the vertical length of the gray belt.
+In conclusion, the presented code offers a straightforward solution for conducting various video analysis tasks utilizing OpenCV and Numpy. With the input of conveyor belt speed and length, the code is capable of automatically computing the cycle length and extracting essential frames for further analysis. The code efficiently applies masking and edge detection techniques to identify and measure the vertical length of the gray belt, making it a valuable tool for studying conveyor belt operations.
