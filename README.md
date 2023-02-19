@@ -1,6 +1,6 @@
 # Amazon Conveyor Belt Tracking
 
-This code processes a video to detect the straightness of edges in the frames. It does this by extracting frames from the video, masking the images, detecting the edges of the images, and testing the straightness of the edges.
+The purpose of this code is to record, process, and analyze the full length of a conveyor belt to detect any variations in the straightness of the edges. This is done by first extracting frames from the video, masking the images, detecting the edges of the images, and then testing the straightness of the edges. Laslty, we use these values and created a belt health metric depending on if the belt is tracked correctly.
 
 ## Requirements
 
@@ -29,7 +29,7 @@ This code processes a video to detect the straightness of edges in the frames. I
 - os.listdir(): to get the list of files in a directory.
 - os.path.join(): to join two or more path components.
 
-## Part 1: Taking the Video
+## Part 1: Video Capture
 
 In the first part of the code, the user is prompted to enter the speed and length of a conveyor belt. The cycle length of the belt is then calculated using the formula:
 
@@ -37,37 +37,39 @@ cycle_length = length / speed * 5280 / 3600
 
 The video codec used to compress the video file is set to mp4v using the cv2.VideoWriter_fourcc function. The total number of frames in the video is obtained using the cv2.VideoCapture.get function with the cv2.CAP_PROP_FRAME_COUNT argument. The images are read and written to files using the cv2.imread and cv2.imwrite functions, respectively. The recording stops after the calculated cycle length has elapsed.
 
-## Part 2: Extracting Frames from the Video
+## Part 2: Frame Extraction
 
 In this part, the video file is loaded using `cv2.VideoCapture` and the number of frames in the video is determined using `cv2.CAP_PROP_FRAME_COUNT`. The code then extracts the first 300 frames and saves them as individual JPG images in a folder named "Frame".
 
-## Part 3: Masking the Image
+## Part 3: Image Masking
 
-In this part, the images in the "Frame" folder are masked using OpenCV's rectangle drawing and bitwise operations. To mask the images, a black image with the same size as the frame is created (mask = np.zeros((height, width, 3), np.uint8)), and a white rectangle is drawn on the mask to cover everything outside of the middle square. The mask is then inverted and applied to the frame using the cv2.bitwise_and function.
+This section of the code processes the images in the "Frame" folder by masking them using OpenCV's rectangle drawing and bitwise operations. To mask the images, a black image with the same size as the frame is created using mask = np.zeros((height, width, 3), np.uint8), and a white rectangle is drawn on the mask to cover everything outside of the middle square. The mask is then inverted and applied to the frame using the cv2.bitwise_and function.
 
-## Part 4: Detecting the Vertical Length of the Gray Belt
+## Part 4: Vertical Belt Length Detection
 
-The Sobel and Canny edge detection algorithms are used to detect edges in the images. 
+Using two edge detection algorithms - Hough and Sobel - to detect the edges in the images.
 
-The Hough transformation algorithm is a technique used for detecting shapes in an image, specifically lines and curves. The algorithm works by converting the image from Cartesian coordinates (x, y) to polar coordinates (r, θ) using the Hough transform. This transforms each point in the original image to a line in the transformed image.
+# Sobel Edge Detection
 
-<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_Cr73Mte5NNgO16D4moKDQg.webp" alt="Hough Transformation Algorithim">
+First, I extract the frames from the video and apply Sobel edge detection and Canny edge detection to the grayscale image. I then apply the Sobel edge detection on the Y-axis to detect vertical edges and save the resulting image in the "Edge" folder. The Sobel algorithm works by computing the gradient of the image using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges. The output of the two convolutions is combined to create a single edge map that highlights areas of high intensity change in any direction. This edge map is thresholded to identify the edges in the original belt image.
+
+<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_kB-_G3KdXA7r5v403EbwEg.webp" alt="Sobel Algorithm">
 <br>
 <p align="center">
-  <em>Gradient of f(x, y) at co-ordinate (x, y) is defined as 2 dimensional column vectors pointing to direction of greatest rate of change f at that location.</em>
+  <em>Using the Sobel edge detection method to detect edges in an image by computing the gradient of the image. This is done using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges, which are applied to the image to obtain the gradient components in both directions.</em>
 </p>
 
-The algorithm then counts the number of intersections of lines in the transformed image, which correspond to points in the original image that are part of the same line. By thresholding the number of intersections, we can identify the lines in the original belt image.
+# Hough Transformation
+Next, I use the Hough transformation algorithm to detect the straight lines in the image. The Hough transformation algorithm works by converting the image from Cartesian coordinates (x, y) to polar coordinates (r, θ) using the Hough transform. This transforms each point in the original image to a line in the transformed image.
 
-The Sobel edge detection algorithm is a technique used to detect edges in an image. The algorithm works by convolving the image with two filters, one for the x-direction and one for the y-direction. These filters highlight areas in the image where there is a sharp change in intensity in the x or y direction, respectively.
-
-<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_kB-_G3KdXA7r5v403EbwEg.webp" alt="Sobel Algorithim">
+<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_Cr73Mte5NNgO16D4moKDQg.webp" alt="Hough Transformation Algorithm">
 <br>
 <p align="center">
-  <em>The equation to calculate a slope of a line.</em>
+  <em>The Hough Space is now represented with ρ and θ instead of slope a and intercept b, where the horizontal axis is for the θ values and the vertical axis is for the ρ values. An edge point generates a cosine curve in the Hough Space, replacing the straight line representation and resolving the issue of unbounded values of a that arises when dealing with vertical lines.</em>
 </p>
+The algorithm counts the number of intersections of lines in the transformed image, which correspond to points in the original image that are part of the same line. By thresholding the number of intersections, we can identify the lines in the original belt image.
 
-The output of the two convolutions are then combined to create a single edge map that highlights areas of high intensity change in any direction. This edge map are used a thresholded to identify the edges in the original belt image.
+After processing the images to grayscale with Sobel edge and Canny edge detection, I loop through each file in the "Edge" folder and apply the Hough transformation algorithm to detect the vertical lines in the image. I store the resulting value of the "straightness" in a list called "straightness_values".
 
 ## Conclusion
 
