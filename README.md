@@ -51,10 +51,10 @@ The Sobel and Canny edge detection algorithms are used to detect edges in the im
 
 The Hough transformation algorithm is a technique used for detecting shapes in an image, specifically lines and curves. The algorithm works by converting the image from Cartesian coordinates (x, y) to polar coordinates (r, θ) using the Hough transform. This transforms each point in the original image to a line in the transformed image.
 
-<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_X1WO4jfw3qSsttBcfg2d3g.webp" alt="Hough Transformation Algorithim">
+<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_Cr73Mte5NNgO16D4moKDQg.webp" alt="Hough Transformation Algorithim">
 <br>
 <p align="center">
-  <em>Optional caption goes here</em>
+  <em>Gradient of f(x, y) at co-ordinate (x, y) is defined as 2 dimensional column vectors pointing to direction of greatest rate of change f at that location.</em>
 </p>
 
 The algorithm then counts the number of intersections of lines in the transformed image, which correspond to points in the original image that are part of the same line. By thresholding the number of intersections, we can identify the lines in the original belt image.
@@ -64,7 +64,7 @@ The Sobel edge detection algorithm is a technique used to detect edges in an ima
 <img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_kB-_G3KdXA7r5v403EbwEg.webp" alt="Sobel Algorithim">
 <br>
 <p align="center">
-  <em>Optional caption goes here</em>
+  <em>The equation to calculate a slope of a line.</em>
 </p>
 
 The output of the two convolutions are then combined to create a single edge map that highlights areas of high intensity change in any direction. This edge map are used a thresholded to identify the edges in the original belt image.
