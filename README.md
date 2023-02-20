@@ -75,3 +75,9 @@ After processing the images to grayscale with Sobel edge and Canny edge detectio
 ## Conclusion
 
 In conclusion, the presented code offers a straightforward solution for conducting various video analysis tasks utilizing OpenCV and Numpy. With the input of conveyor belt speed and length, the code is capable of automatically computing the cycle length and extracting essential frames for further analysis. The code efficiently applies masking and edge detection techniques to identify and measure the vertical length of the gray belt, making it a valuable tool for studying conveyor belt operations.
+
+<img src="https://raw.githubusercontent.com/wyniemko/amazon-conveyor-tracking/main/images/flowchart.png" alt="Flowchart">
+<br>
+<p align="center">
+  <em>Flow-chart: order of operations</em>
+</p>
