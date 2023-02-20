@@ -1,6 +1,6 @@
 # Amazon Conveyor Belt Tracking
 
-The purpose of this code is to record, process, and analyze the full length of a conveyor belt to detect any variations in the straightness of the edges. This is done by first extracting frames from the video, masking the images, detecting the edges of the images, and then testing the straightness of the edges. Laslty, we use these values and created a belt health metric depending on if the belt is tracked correctly.
+This system is designed to monitor an Amazon conveyor belt, by capturing, processing, and analyzing its complete length, in order to identify any anomalies in the straightness of the belt edges. The process begins by extracting frames from the video footage, then applying a masking technique to isolate the relevant images. The edges of the images are then detected and assessed to determine the level of straightness. This information is subsequently utilized to generate a belt health metric, which provides a quantitative assessment of the conveyor belt's performance. Based on the analysis, the system offers recommendations for appropriate corrective actions, should they be necessary.
 
 ## Requirements
 
