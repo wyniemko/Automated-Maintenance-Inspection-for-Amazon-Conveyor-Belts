@@ -1,6 +1,6 @@
-# Amazon Conveyor Belt Tracking
+# Automated Maintenance Inspection for Amazon Conveyor Belts
 
-This system is designed to monitor an Amazon conveyor belt, by capturing, processing, and analyzing its complete length, in order to identify any anomalies in the straightness of the belt edges. The process begins by extracting frames from the video footage, then applying a masking technique to isolate the relevant images. The edges of the images are then detected and assessed to determine the level of straightness. This information is subsequently utilized to generate a belt health metric, which provides a quantitative assessment of the conveyor belt's performance. Based on the analysis, the system offers recommendations for appropriate corrective actions, should they be necessary.
+This system automates the maintenance inspection process of a conveyor belt at Amazon, by identifying both belt tracking variances and defects. The system captures, processes, and analyzes the complete length of the conveyor belt, utilizing OpenCV functions to extract frames from the video footage, isolate relevant images, and detect any anomalies in the straightness of the belt edges. The code then assesses the edges of the images to determine the level of straightness and generates a belt health metric that provides a quantitative assessment of the conveyor belt's performance. Additionally, the system is equipped to detect defects in the belt's surface and provide recommendations for appropriate corrective actions, should they be necessary. This comprehensive code also utilizes edge detection algorithms, including Sobel and Hough, to detect any vertical belt length defects, as well as Canny edge detection to identify belt defects.
 
 ## Requirements
 
