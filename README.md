@@ -72,6 +72,28 @@ The algorithm counts the number of intersections of lines in the transformed ima
 
 After processing the images to grayscale with Sobel edge and Canny edge detection, I loop through each file in the "Edge" folder and apply the Hough transformation algorithm to detect the vertical lines in the image. I store the resulting value of the "straightness" in a list called "straightness_values".
 
+## Part 5: Material, Amnesty, Rip Defect Analysis
+
+The detect_defects() function takes in a frame and an image name as input, which represent a single frame of a video feed and the name of the corresponding image file, respectively. The function then processes the frame to detect material defects, rip defects, and amnesty defects.
+
+The first step in the function is to convert the input frame to grayscale using OpenCV's cvtColor() function. The grayscale image is stored in the variable gray.
+
+The next step is to detect material defects in the frame. This is done by applying a binary threshold to the grayscale image. The threshold value of 200 is chosen to obtain a binary image with clear contrasts between the defects and the background. The threshold() function returns a thresholded image which is then used to find contours in the image using findContours() function. The contours represent the boundaries of the defects in the image. A loop then iterates over each contour and computes the area of the contour using the contourArea() function. If the area of the contour is greater than 500 pixels, it is considered a material defect and its count is incremented. The drawContours() function is then used to draw a red contour line around the defect in the original frame. The final count of material defects is stored in the variable material_count.
+
+The next step is to detect rip defects in the frame. The Sobel operator is applied to the grayscale image in the x-direction using the Sobel() function. This generates an image highlighting the edges in the x-direction. The for loop then iterates over each column of the Sobel image and computes the difference between adjacent pixels in the column. When the difference is negative for one pixel and positive for the next pixel, a rip is detected. The circle() function is used to draw a green circle around the rip in the original frame. Additionally, a separate screenshot of the rip is saved to the 'Rip_defects' folder for further analysis. The final count of rip defects is stored in the variable rip_count.
+
+The last step is to detect amnesty defects in the frame. The Sobel operator is applied to the grayscale image in the y-direction using the Sobel() function. This generates an image highlighting the edges in the y-direction. The for loop then iterates over each row of the Sobel image and computes the difference between adjacent pixels in the row. When the difference is positive for one pixel and negative for the next pixel, an amnesty is detected. The circle() function is used to draw a blue circle around the amnesty in the original frame. Additionally, a separate screenshot of the amnesty is saved to the 'Amnesty_defects' folder for further analysis. The final count of amnesty defects is stored in the variable amnesty_count.
+
+The detect_defects() function then returns the original frame with all the detected defects highlighted, along with the counts of material, rip, and amnesty defects.
+
+The main code segment first creates three output folders for material, rip, and amnesty defect screenshots using the os.makedirs() function. The images list is then populated with the names of all the images in the 'Defect_frames' folder that end with '.jpg'.
+
+A for loop is then used to iterate over each image in the images list. Within the loop, the cv2.imread() function is used to read the image file as a frame. The detect_defects() function is then called to detect defects in the frame, and the resulting counts of material, rip, and amnesty defects are stored in material_count, rip_count, and amnesty_count, respectively. The output frame is also returned from the detect_defects function, which means it can be used for further analysis or processing. Additionally, the function saves screenshots of any detected rip or amnesty defects to separate folders, which can be useful for further inspection or documentation.
+
+The code then creates three output folders for material, rip, and amnesty defects and saves the output image to the main output folder. It also prints out the counts of each type of defect for the current image.
+
+Finally, the code loops through the counts of each type of defect and saves any corresponding defect screenshots to the appropriate output folder. If there were no defects of a particular type detected, no screenshot is saved for that type.
+
 ## Conclusion
 
 In conclusion, the presented code offers a straightforward solution for conducting various video analysis tasks utilizing OpenCV and Numpy. With the input of conveyor belt speed and length, the code is capable of automatically computing the cycle length and extracting essential frames for further analysis. The code efficiently applies masking and edge detection techniques to identify and measure the vertical length of the gray belt, making it a valuable tool for studying conveyor belt operations.
