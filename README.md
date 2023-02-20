@@ -53,7 +53,7 @@ Using two edge detection algorithms - Hough and Sobel - to detect the edges in t
 
 First, I extract the frames from the video and apply Sobel edge detection and Canny edge detection to the grayscale image. I then apply the Sobel edge detection on the Y-axis to detect vertical edges and save the resulting image in the "Edge" folder. The Sobel algorithm works by computing the gradient of the image using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges. The output of the two convolutions is combined to create a single edge map that highlights areas of high intensity change in any direction. This edge map is thresholded to identify the edges in the original belt image.
 
-<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_kB-_G3KdXA7r5v403EbwEg.webp" alt="Sobel Algorithm">
+<img src="https://raw.githubusercontent.com/wyniemko/amazon-conveyor-tracking/main/images/Sobel%20Edge%20Detection.webp" alt="Sobel Algorithm">
 <br>
 <p align="center">
   <em>Using the Sobel edge detection method to detect edges in an image by computing the gradient of the image. This is done using two linear operators, one for detecting horizontal edges and the other for detecting vertical edges, which are applied to the image to obtain the gradient components in both directions.</em>
@@ -62,7 +62,7 @@ First, I extract the frames from the video and apply Sobel edge detection and Ca
 ### Hough Transformation
 Next, I use the Hough transformation algorithm to detect the straight lines in the image. The Hough transformation algorithm works by converting the image from Cartesian coordinates (x, y) to polar coordinates (r, θ) using the Hough transform. This transforms each point in the original image to a line in the transformed image.
 
-<img src="https://raw.githubusercontent.com/wyniemko/conveyor-belt-tracking/main/1_Cr73Mte5NNgO16D4moKDQg.webp" alt="Hough Transformation Algorithm">
+<img src="https://raw.githubusercontent.com/wyniemko/amazon-conveyor-tracking/main/images/Hough%20Transformation.webp" alt="Hough Transformation Algorithm">
 <br>
 <p align="center">
   <em>The Hough Space is now represented with ρ and θ instead of slope a and intercept b, where the horizontal axis is for the θ values and the vertical axis is for the ρ values. An edge point generates a cosine curve in the Hough Space, replacing the straight line representation and resolving the issue of unbounded values of a that arises when dealing with vertical lines.</em>
