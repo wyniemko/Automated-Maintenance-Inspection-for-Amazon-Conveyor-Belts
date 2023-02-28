@@ -2,7 +2,18 @@ import cv2
 import numpy as np
 import os
 import time
-import matplotlib.pyplot as plt
+
+#create two empty folders called Edge and Frame
+if not os.path.exists('Edge'):
+    os.makedirs('Edge')
+if not os.path.exists('Frame'):
+    os.makedirs('Frame')
+
+#delete the files in the folders called Edge and Frame
+for filename in os.listdir("Edge"):
+    os.remove(os.path.join("Edge", filename))
+for filename in os.listdir("Frame"):
+    os.remove(os.path.join("Frame", filename))
 
 #Part 1: Taking the video
 def calc_cycle_length(speed, length):
@@ -38,8 +49,6 @@ if __name__ == "__main__":
     cv2.destroyAllWindows()
 
 # Part 2: Extracting frames from the video
-
-# Load the video file
 cap = cv2.VideoCapture('belt.mp4')
 
 # Get the number of frames
@@ -59,13 +68,9 @@ for frame_num in range(total_frames):
         cv2.imwrite(f'Frame/frame_{frame_num}.jpg', frame)
     else:
         break
-
-# Release the VideoCapture object
 cap.release()
 
 # Part 3: Masking the image
-
-# Define the size of the mask
 mask_size = 300
 
 # Get the list of all the images in the folder
@@ -156,7 +161,6 @@ for filename in os.listdir("Edge"):
         # Calculate the straightness of the vertical edge
         straightness = 1 / avg_dist if avg_dist > 0 else 0
 
-        # Append the straightness value to the list
         straightness_values.append(straightness)
 
         print(f"Straightness of {filename}: {straightness:.2f}")
@@ -166,7 +170,6 @@ for filename in os.listdir("Edge"):
 # Calculate the average of all straightness values
 avg_straightness = sum(straightness_values) / len(straightness_values) if len(straightness_values) > 0 else 0
 
-# Print the final average straightness value and corresponding statement with extra spacing
 print("\n\n" +
       f"Final average straightness value: {avg_straightness:.2f}\n" +
       ("The straightness belt is on track." if avg_straightness >= 0.75 else
