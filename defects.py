@@ -58,51 +58,6 @@ for frame_num in range(total_frames):
         break
 cap.release()
 
-# Part 3 - Taking another video (defects.mp4)
-cap = cv2.VideoCapture(0)
-
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter('defects.mp4',fourcc, 20.0, (640,480))
-
-recording_time = cycle_length
-start_time = time.time()
-while(cap.isOpened() and time.time() - start_time < recording_time):
-    ret, frame = cap.read()
-    if ret==True:
-        out.write(frame)
-
-        cv2.imshow('Defect_frames',frame)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    else:
-        break
-    
-    cap.release()
-    out.release()
-    cv2.destroyAllWindows()
-
-# Part 4: Extracting frames from the video 2
-cap = cv2.VideoCapture('defects.mp4')
-
-# Get the number of frames
-total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-
-# Limit the number of frames to 300
-total_frames = min(total_frames, 300)
-
-# Create a folder to store the extracted frames
-if not os.path.exists('Defect_frames'):
-    os.makedirs('Defect_frames')
-
-# Extract each frame and save it as an image
-for frame_num in range(total_frames):
-    ret, frame = cap.read()
-    if ret:
-        cv2.imwrite(f'Frame/frame_{frame_num}.jpg', frame)
-    else:
-        break
-cap.release()
-
 # Part 5: Masking the image
 mask_size = 300
 
@@ -140,34 +95,6 @@ for image_name in images:
 
     # Save the masked image
     cv2.imwrite(os.path.join(folder, image_name), result)
-
-# part 6: Edge detection for all the images in Frame folder
-
-# Create a folder to store the edge-detected frames
-if not os.path.exists('Edge'):
-    os.makedirs('Edge')
-
-# Loop through all files in Frame folder
-for filename in os.listdir("Frame"):
-    # Load the image
-    img = cv2.imread(os.path.join("Frame", filename))
-
-    # Convert to grayscale
-    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    
-    # Blur the image for better edge detection
-    img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0) 
-    
-    # Sobel Edge Detection on the Y axis
-    sobely = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=1)
-    
-    # Canny Edge Detection
-    edges = cv2.Canny(image=img_blur, threshold1=25, threshold2=35)
-    
-    # Save the image with the edge detection result
-    cv2.imwrite(os.path.join("Edge", f"Edge Detection_{filename}"), edges)
- 
-cv2.destroyAllWindows()
 
 # Part 7: testing straight line detection
 
