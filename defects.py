@@ -58,7 +58,7 @@ for frame_num in range(total_frames):
         break
 cap.release()
 
-# Part 5: Masking the image
+# Part 3: Masking the image
 mask_size = 300
 
 # Get the list of all the images in the folder
@@ -96,49 +96,7 @@ for image_name in images:
     # Save the masked image
     cv2.imwrite(os.path.join(folder, image_name), result)
 
-# Part 7: testing straight line detection
-
-# Create an empty list to store all straightness values
-straightness_values = []
-
-# Loop through all files in Edge folder
-for filename in os.listdir("Edge"):
-    # Load the image
-    img = cv2.imread(os.path.join("Edge", filename))
-
-    # Convert to grayscale
-    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    # Detect vertical lines using Hough transform
-    lines = cv2.HoughLinesP(img_gray, rho=1, theta=np.pi/180, threshold=100, minLineLength=100, maxLineGap=10)
-
-    # Calculate the average distance between endpoints of detected lines
-    if lines is not None:
-        endpoint_dists = [abs(line[0][2]-line[0][0]) for line in lines if abs(line[0][3]-line[0][1]) > 20]
-        avg_dist = sum(endpoint_dists) / len(endpoint_dists) if len(endpoint_dists) > 0 else 0
-
-        # Calculate the straightness of the vertical edge
-        straightness = 1 / avg_dist if avg_dist > 0 else 0
-
-        # Append the straightness value to the list
-        straightness_values.append(straightness)
-
-        print(f"Straightness of {filename}: {straightness:.2f}")
-    else:
-        print(f"No vertical lines detected in {filename}, move camera further left.")
-
-# Calculate the average of all straightness values
-avg_straightness = sum(straightness_values) / len(straightness_values) if len(straightness_values) > 0 else 0
-
-# Print the final average straightness value and corresponding statement with extra spacing
-print("\n\n" +
-      f"Final average straightness value: {avg_straightness:.2f}\n" +
-      ("The straightness belt is on track." if avg_straightness >= 0.75 else
-       "The conveyor belt is slightly misaligned. Tighten the belt." if avg_straightness >= 0.50 else
-       "The conveyor belt is misaligned. Replace the belt & add more tension.") +
-      "\n\n")
-
-# Part 8: Defect Analysis
+# Part 4: Defect Analysis
 def detect_defects(frame, image_name):
     # Convert the frame to grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
