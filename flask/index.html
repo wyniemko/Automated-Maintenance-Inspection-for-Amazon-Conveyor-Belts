@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Belt App</title>
+</head>
+<body>
+    <form method="post">
+        <p>Enter the speed of the belt in mph: <input type="text" name="speed"></p>
+        <p>Enter the length of the belt in feet: <input type="text" name="length"></p>
+        <p><input type="submit" value="Submit"></p>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        // Submit the form via AJAX
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/run_script');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Parse the JSON response
+                    var result = JSON.parse(xhr.responseText);
+
+                    // Display the images
+                    var resultsDiv = document.getElementById('results');
+                    for (var key in result) {
+                        var img = document.createElement('img');
+                        img.src = result[key];
+                        resultsDiv.appendChild(img);
+                    }
+                } else {
+                    console.log('Request failed.  Returned status of ' + xhr.status);
+                }
+            };
+            xhr.send(new FormData(this));
+        });
+    </script>
+</body>
+</html>
