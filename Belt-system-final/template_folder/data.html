@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 0 auto 20px;
+        }
+        table th, table td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+        table th {
+            background-color: #e1e1e1;
+        }
+    </style>
+</head>
+<body>
+    <h1>Data</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Average Straightness</th>
+                <th>Blue Values</th>
+                <th>Average Number of Vertices</th>
+                <th>Average Solidity</th>
+                <th>Date</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>{{ row[5] }}</td>
+                <td>{{ row[6] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button onclick="window.location.href='results'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">Results</button>
+    <button onclick="window.location.href='http://127.0.0.1:5000/'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">Home</button>
+</body>
+</html>

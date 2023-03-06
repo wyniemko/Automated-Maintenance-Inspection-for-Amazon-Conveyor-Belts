@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Maintenance Inspection for Amazon Conveyor Belts</title>
+    <style>
+        .table-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  font-weight: bold;
+}
+
+caption {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        label {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        input[type=number] {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 0 gray;
+            margin-bottom: 20px;
+            width: 200px;
+        }
+        input[type=submit] {
+            padding: 10px 20px;
+            background-color: #2d9ee0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 0 gray;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        input[type=submit]:hover {
+            background-color: #2172a7;
+        }
+        h2 {
+            margin-top: 50px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        b {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Automated Maintenance Inspection for Amazon Conveyor Belts</h1>
+    <form method="POST" action="{{ url_for('process') }}">
+        <label for="speed">Belt speed (mph):</label>
+        <input type="number" id="speed" name="speed" required>
+        <br>
+        <label for="distance">Belt length (feet):</label>
+        <input type="number" id="length" name="length" required>       
+        <br>
+        <input type="submit" value="Start">
+    </form>
+    <br>
+    
+    <div class="table-container">
+        <table class="belt-evaluation">
+          <caption>Belt Condition Evaluation Critera</caption>
+          <tr>
+            <th>Edge</th>
+            <td>The number of edges detected on the belt surface. A lower number of edges is indicative of a smoother surface, while a higher number of edges may indicate damage or debris on the belt.</td>
+          </tr>
+          <tr>
+            <th>Vertices</th>
+            <td>The number of vertices detected on the belt surface. A higher number of vertices is indicative of a rougher surface, which can cause wear and tear on the belt over time.</td>
+          </tr>
+          <tr>
+            <th>Convexity</th>
+            <td>A measure of how 'bulging' or 'hollow' the belt surface is. A convex surface is one that curves outward, while a concave surface curves inward. In general, a more convex surface is less likely to cause damage to the belt.</td>
+          </tr>
+          <tr>
+            <th>Solidity</th>
+            <td>The ratio of the area of the belt surface to the area of its convex hull. This measures how 'solid' the belt surface is, with higher values indicating a smoother, less irregular surface.</td>
+          </tr>
+        </table>
+        <table class="benchmark-data">
+          <caption>Benchmark Data Thresholds</caption>
+          <tr>
+            <th>Edge Threshold</th>
+            <td>50</td>
+          </tr>
+          <tr>
+            <th>Vertices Threshold</th>
+            <td>200</td>
+          </tr>
+          <tr>
+            <th>Convexity Threshold</th>
+            <td>0.5</td>
+          </tr>
+          <tr>
+            <th>Solidity Threshold</th>
+            <td>0.8</td>
+          </tr>
+        </table>
+      </div>
+      
+
+
+    <button onclick="window.location.href='data'" style="display: block; margin: 20px auto 20px; font-size: 0.8em; padding: 10px 20px; ">View Previous Results</button>
+
+</body>
+</html>

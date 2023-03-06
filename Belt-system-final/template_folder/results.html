@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 20px 0 40px;
+        }
+        
+        h3 {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto 40px;
+        }
+
+        table th, table td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #e1e1e1;
+        }
+
+        .good {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .bad {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Predictive Maintenance Report</h1>
+
+      
+    {% if avg_straightness >= 80 and avg_straightness <= 100 and blue_values|sum < 10 and avg_num_vertices >= 500 and avg_num_vertices <= 1000 and avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
+        <p class="good">The belt is in good condition.</p>
+    {% else %}
+        <p class="bad">The belt is in bad condition and requires maintenance.</p>
+    {% endif %}
+    
+    <h3>Benchmark Data (comparative)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Average straightness value</th>
+                <th>Total number of rips</th>
+                <th>Average overall surface condition of the belt (vertices)</th>
+                <th>Average number of edges</th>
+                <th>Average number of vertices</th>
+                <th>Average convexity value</th>
+                <th>Average convexity solidity value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>80-100</td>
+                <td>less than 10</td>
+                <td>500-1000</td>
+                <td>50</td>
+                <td>200</td>
+                <td>0.5</td>
+                <td>0.8</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Performance (aquired data from previous system run)</h3>
+    <b> </b>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Benchmark</th>
+                <th>Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Average straightness value</td>
+                <td>{{ avg_straightness }}</td>
+                <td>80-100</td>
+                {% if avg_straightness >= 80 and avg_straightness <= 100 %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Total number of rips</td>
+                <td>{{ blue_values|sum }}</td>
+                <td>less than 10</td>
+                {% if blue_values|sum < 10 %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Average overall surface condition</td>
+                <td>{{ avg_num_vertices }} vertices, {{ avg_solidity }} solidity</td>
+                <td>500-1000 vertices, 0.9-0.95 solidity</td>
+                {% if avg_num_vertices >= 500 and avg_num_vertices <= 1000 and avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Solidity</td>
+                <td>{{ avg_solidity }}</td>
+                <td>0.9-0.95</td>
+                {% if avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+
+    <button onclick="window.location.href='data'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">View Previous Results</button>
+    <button onclick="window.location.href='http://127.0.0.1:5000/'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">Home</button>
+
+</body>
+</html>
