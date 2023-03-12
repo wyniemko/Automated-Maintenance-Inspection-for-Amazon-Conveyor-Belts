@@ -29,6 +29,11 @@ This system automates conveyor belt maintenance inspections at Amazon by identif
 - os.listdir(): to get the list of files in a directory.
 - os.path.join(): to join two or more path components.
 
+
+## Part 0: Updates
+
+All steps below have been integreated into a flask web server. A home page, belt maintenance report, and data page has been added. 
+
 ## Part 1: Video Capture
 
 In the first part of the code, the user is prompted to enter the speed and length of a conveyor belt. The cycle length of the belt is then calculated using the formula:
