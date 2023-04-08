@@ -67,33 +67,8 @@
         <p class="bad">The belt is in bad condition and requires maintenance.</p>
     {% endif %}
     
-    <h3>Benchmark Data (comparative)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Average straightness value</th>
-                <th>Total number of rips</th>
-                <th>Average overall surface condition of the belt (vertices)</th>
-                <th>Average number of edges</th>
-                <th>Average number of vertices</th>
-                <th>Average convexity value</th>
-                <th>Average convexity solidity value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>80-100</td>
-                <td>less than 10</td>
-                <td>500-1000</td>
-                <td>50</td>
-                <td>200</td>
-                <td>0.5</td>
-                <td>0.8</td>
-            </tr>
-        </tbody>
-    </table>
 
-    <h3>Performance (aquired data from previous system run)</h3>
+    <h3>Performance</h3>
     <b> </b>
     <table>
         <thead>
@@ -108,8 +83,8 @@
             <tr>
                 <td>Average straightness value</td>
                 <td>{{ avg_straightness }}</td>
-                <td>80-100</td>
-                {% if avg_straightness >= 80 and avg_straightness <= 100 %}
+                <td>{{ benchmark_straightness_min }}-{{ benchmark_straightness_max }}</td>
+                {% if avg_straightness >= benchmark_straightness_min and avg_straightness <= benchmark_straightness_max %}
                 <td class="good">Good</td>
                 {% else %}
                 <td class="bad">Bad</td>
@@ -118,8 +93,8 @@
             <tr>
                 <td>Total number of rips</td>
                 <td>{{ blue_values|sum }}</td>
-                <td>less than 10</td>
-                {% if blue_values|sum < 10 %}
+                <td>less than {{ benchmark_rips_max }}</td>
+                {% if blue_values|sum < benchmark_rips_max %}
                 <td class="good">Good</td>
                 {% else %}
                 <td class="bad">Bad</td>
@@ -127,29 +102,19 @@
             </tr>
             <tr>
                 <td>Average overall surface condition</td>
-                <td>{{ avg_num_vertices }} vertices, {{ avg_solidity }} solidity</td>
-                <td>500-1000 vertices, 0.9-0.95 solidity</td>
-                {% if avg_num_vertices >= 500 and avg_num_vertices <= 1000 and avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
-                <td class="good">Good</td>
-                {% else %}
-                <td class="bad">Bad</td>
-                {% endif %}
-            </tr>
-            <tr>
-                <td>Solidity</td>
-                <td>{{ avg_solidity }}</td>
-                <td>0.9-0.95</td>
-                {% if avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
+                <td>{{ avg_num_vertices }} vertices</td>
+                <td>{{ benchmark_vertices_min }}-{{ benchmark_vertices_max }} vertices</td>
+                {% if avg_num_vertices >= benchmark_vertices_min and avg_num_vertices <= benchmark_vertices_max %}
                 <td class="good">Good</td>
                 {% else %}
                 <td class="bad">Bad</td>
                 {% endif %}
             </tr>
         </tbody>
-    </table>
+    </table>        
 
     <button onclick="window.location.href='data'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">View Previous Results</button>
-    <button onclick="window.location.href='http://127.0.0.1:5000/'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">Home</button>
+    <button onclick="window.location.href='http://0.0.0.0:5000'" style="display: block; margin: 0 auto 20px; font-size: 0.8em; padding: 10px 20px; ">Home</button>
 
 </body>
 </html>

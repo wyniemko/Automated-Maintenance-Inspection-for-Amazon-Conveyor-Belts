@@ -5,9 +5,26 @@ import numpy as np
 import os
 import time
 import sqlite3
-import datetime
 
 app = Flask(__name__, template_folder='template_folder')
+
+benchmark_straightness_min = 80
+benchmark_straightness_max = 100
+benchmark_rips_max = 10
+benchmark_vertices_min = 500
+benchmark_vertices_max = 1000
+
+@app.route('/update_benchmark_values', methods=['POST'])
+def update_benchmark_values():
+    global benchmark_straightness_min, benchmark_straightness_max, benchmark_rips_max, benchmark_vertices_min, benchmark_vertices_max
+    
+    benchmark_straightness_min = int(request.form['benchmark_straightness_min'])
+    benchmark_straightness_max = int(request.form['benchmark_straightness_max'])
+    benchmark_rips_max = int(request.form['benchmark_rips_max'])
+    benchmark_vertices_min = int(request.form['benchmark_vertices_min'])
+    benchmark_vertices_max = int(request.form['benchmark_vertices_max'])
+
+    return redirect(url_for('index'))
 
 def calc_cycle_length(speed, length):
     return length / speed * 5280 / 3600
@@ -21,7 +38,7 @@ def index():
         speed = float(request.form['speed'])
         length = float(request.form['length'])
 
-    return render_template('index.html')
+    return render_template('index.html', benchmark_straightness_min=benchmark_straightness_min, benchmark_straightness_max=benchmark_straightness_max, benchmark_rips_max=benchmark_rips_max, benchmark_vertices_min=benchmark_vertices_min, benchmark_vertices_max=benchmark_vertices_max)
 
 @app.route('/process', methods=['POST'])
 def process():
@@ -82,7 +99,8 @@ def process():
     for frame_num in range(total_frames):
         ret, frame = cap.read()
         if ret:
-            cv2.imwrite(f'Frame/frame_{frame_num}.jpg', frame[:, 100:-100])
+            # To crop the frame, uncomment the line below and adjust the values accordingly
+            # cv2.imwrite(f'Frame/frame_{frame_num}.jpg', frame[:, 50:-50])
             img_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             img_blur = cv2.GaussianBlur(img_gray, (3, 3), 0)
             sobely = cv2.Sobel(src=img_blur, ddepth=cv2.CV_64F, dx=0, dy=1, ksize=1)
@@ -100,7 +118,7 @@ def process():
         img = cv2.imread(os.path.join("Frame", filename))
 
         # Crop the left and right sides of the image
-        cropped_img = img[:, 100:-100]
+        cropped_img = img[:, 10:-10]
 
         # Overwrite the original image with the cropped image
         cv2.imwrite(os.path.join("Frame", filename), cropped_img)
@@ -303,7 +321,7 @@ def results():
     conn.commit()
     conn.close()
 
-    return render_template('results.html', avg_straightness=avg_straightness, blue_values=blue_values, avg_num_vertices=avg_num_vertices, avg_solidity=avg_solidity)
+    return render_template('results.html', avg_straightness=avg_straightness, blue_values=blue_values, avg_num_vertices=avg_num_vertices, benchmark_straightness_min=benchmark_straightness_min, benchmark_straightness_max=benchmark_straightness_max, benchmark_rips_max=benchmark_rips_max, benchmark_vertices_min=benchmark_vertices_min, benchmark_vertices_max=benchmark_vertices_max)
 
 @app.route('/data')
 def data():
