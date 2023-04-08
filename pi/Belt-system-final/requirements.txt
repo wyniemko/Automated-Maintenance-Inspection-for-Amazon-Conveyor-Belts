@@ -1,0 +1,5 @@
+flask
+numpy
+opencv-python-headless
+sqlite3
+pillow
