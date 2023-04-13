@@ -1,33 +1,64 @@
 # Automated Maintenance Inspection for Amazon Conveyor Belts
 
-This system automates conveyor belt maintenance inspections at Amazon by identifying tracking variances and defects. It analyzes the entire length of the belt using OpenCV functions to extract and isolate relevant images. The code assesses belt straightness and detects defects to generate a health metric. It also uses edge detection algorithms, including Sobel and Hough, to detect vertical length defects and Canny edge detection for belt defects. It provides recommendations for corrective actions as needed.
+The Conveyor Belt Monitoring System is an application that monitors the condition of a conveyor belt used in a manufacturing or logistics facility. The system uses computer vision to analyze images captured by a camera mounted above the conveyor belt. The system extracts key features such as the straightness of the belt, the number of rips on the belt, and the number of vertices on the belt surface. Based on these features, the system generates a report indicating the condition of the belt and whether maintenance is required.
 
 ## Requirements
 
-- Python 3
-- OpenCV
-- Numpy
+- Python 3.6 or higher
+- Flask framework
+- OpenCV 4.5 or higher
+- NumPy 1.19 or higher
+- SQLite 3
+
+## Running the Code
+1. Clone the repository to your local machine.
+2. Ensure that you have all the necessary packages installed. To do this, run pip install -r requirements.txt in your terminal or command prompt.
+3. Open a new terminal or command prompt window and navigate to the directory where the code is located.
+4. Run the run.py script by typing python run.py into the terminal or command prompt and pressing enter.
+5. The program should start running, and you will see a message in the terminal or command prompt indicating that the web server is running.
+6. Open a web browser and navigate to http://localhost:5000/ to view the home page of the web application.
+7. Enter the required information on the home page and click the Start button to start the conveyor belt inspection process.
+8. Once the inspection is complete, the results will be displayed on the results page. You can access the results page by clicking the View Previous Results button on the home page.
+9. To view the data stored in the database, click the Data button on the home page to view a table of all previous inspection results.
 
 ## Utilization of OpenCV Functions
 
-- cv2.VideoCapture(): to access the video capture device to record the video.
-- cv2.VideoWriter_fourcc(): to select the video codec for the video writer object.
-- cv2.VideoWriter(): to create a video writer object and save the video.
-- cv2.imread(): to load an image from a file.
-- cv2.imwrite(): to write an image to a file.
-- cv2.cvtColor(): to convert the color space of an image from one color space to another.
-- cv2.GaussianBlur(): to apply a Gaussian blur filter to an image.
-- cv2.Sobel(): to perform edge detection on an image using the Sobel operator.
-- cv2.Canny(): to perform edge detection on an image using the Canny operator.
-- cv2.HoughLinesP(): to detect straight lines in an image using the probabilistic Hough transform.
-- cv2.rectangle(): to draw a rectangle on an image.
-- cv2.bitwise_not(): to invert the pixels of an image.
-- cv2.bitwise_and(): to perform bitwise logical "AND" operation between the pixels of two images.
-- np.zeros(): to create an array of zeros with a specified shape.
-- np.uint8(): to convert an array of numbers to 8-bit unsigned integers.
-- np.pi: a constant that represents the value of pi.
-- os.listdir(): to get the list of files in a directory.
-- os.path.join(): to join two or more path components.
+- cv2.VideoCapture() – Captures video frames from a camera or a video file.
+- cv2.cvtColor() – Converts an image from one color space to another.
+- cv2.inRange() – Filters out pixels that are outside a specified range of values.
+- cv2.findContours() – Detects contours (i.e., boundaries) of objects in an image.
+- cv2.drawContours() – Draws contours onto an image.
+- cv2.minAreaRect() – Finds the minimum bounding rectangle of a set of points.
+- cv2.boxPoints() – Calculates the four corners of a rotated rectangle.
+
+## Main.py:
+
+app = Flask(name)
+- Initializes the Flask application.
+
+@app.route('/', methods=['GET', 'POST'])
+- Handles GET and POST requests for the index.html page.
+
+def process_image(img)
+- Processes a single image from the camera.
+- Applies a series of image processing techniques to extract key features of the conveyor belt.
+- Returns the extracted features.
+
+@app.route('/process', methods=['POST'])
+- Handles POST requests for the index.html page.
+- Calls process_image() function to extract features from the image.
+- Calculates average values for each feature across multiple images.
+- Renders the results.html page with the calculated averages.
+
+@app.route('/data')
+- Handles GET requests for the data.html page.
+- Queries the SQLite database for previous reports.
+- Renders the data.html page with the retrieved reports.
+
+@app.route('/update_benchmark_values', methods=['POST'])
+- Handles POST requests for the results.html page.
+- Updates the benchmark values used for comparison in the report.
+- Redirects to the results.html page with updated benchmark values.
 
 
 ## Part 0: Updates
