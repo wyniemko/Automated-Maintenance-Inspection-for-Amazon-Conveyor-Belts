@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Maintenance Inspection for Amazon Conveyor Belts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background-color: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .table-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .table-wrapper {
+            width: 45%;
+            background-color: #f8f8f8;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            font-weight: bold;
+        }
+        caption {
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        label {
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        input[type=number] {
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 0 gray;
+            margin-bottom: 20px;
+            width: 200px;
+        }
+        input[type=submit] {
+            padding: 10px 20px;
+            background-color: #2d9ee0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 0 gray;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+        input[type=submit]:hover {
+            background-color: #2172a7;
+        }
+        h2 {
+            margin-top: 50px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        b {
+            font-weight: bold;
+        }
+        h5 {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            padding: 0 300px;
+        }
+        h6 {
+            display: flex;
+            font-size: 18x;
+        }
+        .intro-text {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 20px;
+          margin-bottom: 20px;
+          padding: 0 10%;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+  {% include 'navbar.html' %}
+    <h1>Automated Maintenance Inspection for Amazon Conveyor Belts</h1>
+    <div class="intro-text">
+      This program runs once a day at 10am (via a CRON job on the Jetson Nano) with these values for speed and length. They can be modified in the benchmark values column.
+    </div>    
+    <div class="table-container">
+      <div class="table-wrapper">
+        <form method="POST" action="{{ url_for('process') }}">
+          <table class="config-table">
+              <caption>Conveyor Belt Configuration</caption>
+              <tr>
+                  <th><label for="speed">Belt speed (mph):</label></th>
+                  <td><input type="number" id="speed" name="speed" value="{{ speed }}" required></td>
+              </tr>
+              <tr>
+                  <th><label for="distance">Belt length (feet):</label></th>
+                  <td><input type="number" id="length" name="length" value="{{ length }}" required></td>
+              </tr>
+          </table>
+          <input type="submit" value="Start">
+        
+      </form>
+  </div>
+  <div class="table-wrapper">
+    <form method="POST" action="{{ url_for('update_benchmark_values') }}">
+        <table class="config-table">
+            <caption>Update Benchmark Values</caption>
+            <tr>
+              <th><label for="benchmark_speed">Speed (mph):</label></th>
+              <td><input type="number" id="benchmark_speed" name="benchmark_speed" value="{{ benchmark_speed }}" required></td>
+            </tr>
+            <tr>
+              <th><label for="benchmark_length">Length (feet):</label></th>
+              <td><input type="number" id="benchmark_length" name="benchmark_length" value="{{ benchmark_length }}" required></td>
+            </tr>            
+            <tr>
+                <th><label for="benchmark_straightness_min">Straightness Min:</label></th>
+                <td><input type="number" id="benchmark_straightness_min" name="benchmark_straightness_min" value="{{ benchmark_straightness_min }}" required></td>
+            </tr>
+            <tr>
+                <th><label for="benchmark_straightness_max">Straightness Max:</label></th>
+                <td><input type="number" id="benchmark_straightness_max" name="benchmark_straightness_max" value="{{ benchmark_straightness_max }}" required></td>
+            </tr>
+            <tr>
+                <th><label for="benchmark_rips_max">Total Rips Max:</label></th>
+                <td><input type="number" id="benchmark_rips_max" name="benchmark_rips_max" value="{{ benchmark_rips_max }}" required></td>
+            </tr>
+            <tr>
+                <th><label for="benchmark_vertices_min">Vertices Min:</label></th>
+                <td><input type="number" id="benchmark_vertices_min" name="benchmark_vertices_min" value="{{ benchmark_vertices_min }}" required></td>
+            </tr>
+            <tr>
+                <th><label for="benchmark_vertices_max">Vertices Max:</label></th>
+                <td><input type="number" id="benchmark_vertices_max" name="benchmark_vertices_max" value="{{ benchmark_vertices_max }}" required></td>
+            </tr>
+        </table>
+        <input type="submit" value="Update Benchmark Values">
+    </form>
+</div>
+</div>
+<div class="intro-text">
+  Based on extensive testing, the following values are the recommended thresholds for Amazon entry conveyor belts to ensure optimal performance and longevity. These thresholds serve as a guideline for evaluating the belt condition and maintaining a high-quality conveyor system.
+</div>   
+<div class="table-container">
+<table class="belt-evaluation">
+    <caption>Suggested Belt Condition Evaluation Criteria for the Entry Belt</caption>
+    <tr>
+        <th>Straightness Min</th>
+        <td>80</td>
+        <td>Minimum acceptable value for straightness. A higher value represents a straighter belt, which can help prevent misalignment and uneven wear.</td>
+    </tr>
+    <tr>
+        <th>Straightness Max</th>
+        <td>100</td>
+        <td>Maximum acceptable value for straightness. A belt with a straightness value within the min-max range is considered to be in good condition.</td>
+    </tr>
+    <tr>
+        <tr>
+            <th>Total Rips Max</th>
+            <td>10</td>
+            <td>Maximum acceptable number of rips on the conveyor belt. A lower number of rips indicates a healthier belt with less potential for failure.</td>
+        </tr>
+        <tr>
+            <th>Vertices Min</th>
+            <td>500</td>
+            <td>Minimum acceptable number of vertices on the belt surface. A higher number of vertices can indicate a rougher surface, causing wear and tear on the belt over time.</td>
+        </tr>
+        <tr>
+            <th>Vertices Max</th>
+            <td>1000</td>
+            <td>Maximum acceptable number of vertices on the belt surface. A belt with a vertices count within the min-max range is considered to have an acceptable surface condition.</td>
+        </tr>
+        <tr>
+            <th>Speed Min (mph)</th>
+            <td>10</td>
+            <td>Minimum acceptable speed for the conveyor belt. A lower speed can help reduce wear and tear on the belt and prolong its lifespan.</td>
+        </tr>
+        <tr>
+            <th>Speed Max (mph)</th>
+            <td>30</td>
+            <td>Maximum acceptable speed for the conveyor belt. Operating the belt within the min-max speed range can help maintain optimal performance and longevity.</td>
+        </tr>
+        <tr>
+            <th>Length Min (feet)</th>
+            <td>1</td>
+            <td>Minimum acceptable length for the conveyor belt. A shorter length can help reduce the risk of misalignment and other issues.</td>
+        </tr>
+        <tr>
+            <th>Length Max (feet)</th>
+            <td>1000</td>
+            <td>Maximum acceptable length for the conveyor belt. A belt with a length within the min-max range is considered to be suitable for the conveyor system.</td>
+        </tr>
+    </table>    
+</div> 
+</body>
+</html>

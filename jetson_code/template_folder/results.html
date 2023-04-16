@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            padding: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 20px 0 40px;
+        }
+        
+        h3 {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto 40px;
+        }
+
+        table th, table td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #e1e1e1;
+        }
+
+        .good {
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .bad {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .chart-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <h1>Predictive Maintenance Report</h1>
+
+      
+    {% if avg_straightness >= 80 and avg_straightness <= 100 and blue_values|sum < 10 and avg_num_vertices >= 500 and avg_num_vertices <= 1000 and avg_solidity >= 0.9 and avg_solidity <= 0.95 %}
+        <p class="good">The belt is in good condition.</p>
+    {% else %}
+        <p class="bad">The belt is in bad condition and requires maintenance.</p>
+    {% endif %}
+    
+
+    <h3>Performance</h3>
+    <b> </b>
+    <table>
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Benchmark</th>
+                <th>Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Average straightness value</td>
+                <td>{{ avg_straightness }}</td>
+                <td>{{ benchmark_straightness_min }}-{{ benchmark_straightness_max }}</td>
+                {% if avg_straightness >= benchmark_straightness_min and avg_straightness <= benchmark_straightness_max %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Total number of rips</td>
+                <td>{{ blue_values|sum }}</td>
+                <td>less than {{ benchmark_rips_max }}</td>
+                {% if blue_values|sum < benchmark_rips_max %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td>Average overall surface condition</td>
+                <td>{{ avg_num_vertices }} vertices</td>
+                <td>{{ benchmark_vertices_min }}-{{ benchmark_vertices_max }} vertices</td>
+                {% if avg_num_vertices >= benchmark_vertices_min and avg_num_vertices <= benchmark_vertices_max %}
+                <td class="good">Good</td>
+                {% else %}
+                <td class="bad">Bad</td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>        
+</body>
+</html>
